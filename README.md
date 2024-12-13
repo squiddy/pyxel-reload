@@ -20,7 +20,6 @@ pip install pyxel-reload
 ## Usage
 
 1. Ensure your game file has an `update` and `draw` function
-2. Ensure `pyxel.run` is only called when run as a script
 
 ```python
 import pyxel
@@ -35,11 +34,10 @@ def draw():
     pyxel.cls(0)
     pyxel.text(10, 10, "Hello, Pyxel!", pyxel.frame_count % 16)
 
-if __name__ == "__main__":
-    pyxel.run(update, draw)
+pyxel.run(update, draw)
 ```
 
-3. Run your game with pyxel-reload:
+2. Run your game with pyxel-reload:
 
 ```bash
 pyxel-reload game
@@ -47,7 +45,7 @@ pyxel-reload game
 
 Where `game` is the name of your Python module (without the .py extension).
 
-4. Make changes to your code or .pyxres files and see them reload automatically!
+3. Make changes to your code or .pyxres files and see them reload automatically!
 
 ## Error Handling
 

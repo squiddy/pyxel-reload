@@ -1,13 +1,10 @@
 [project]
 name = "pyxel-reload"
-version = "0.1.0"
+version = "0.2.0"
 description = "Run your pyxel applications, reloading when code / assets change"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
- "pyxel>=2.2",
- "watchfiles>=1.0.3",
-]
+dependencies = ["pyxel>=2.2", "watchfiles>=1.0.3"]
 authors = [{ name = "Reiner Gerecke" }]
 license = { file = "LICENSE" }
 

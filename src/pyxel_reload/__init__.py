@@ -110,30 +110,46 @@ def main():
     parser.add_argument("module", help="python module", type=str)
     args = parser.parse_args()
 
-    pyxel.init = wrap_init(pyxel.init)
+    patch_pyxel()
     sys.path.append(os.getcwd())
     app_module = importlib.import_module(args.module)
 
     thread = Thread(target=watch_for_changes)
     thread.start()
-    pyxel.run(update, draw)
+    pyxel._run_original(update, draw)  # type: ignore
     thread.join()
 
 
-def wrap_init(func: Callable) -> Callable:
+def patch_pyxel():
     """
-    Protect pyxel.init from being called after the first time, it panics otherwise.
-
-    pyxel.init also does some CWD modification based on the stack, we need to
-    restore CWD because the stack information is wrong because we introduce our
-    wrapper.
+    Patch pyxel to avoid issues with reloading.
     """
 
-    def wrapper(*args, **kwargs):
-        if not getattr(pyxel, "initialized", False):
-            cwd = os.getcwd()
-            func(*args, **kwargs)
-            os.chdir(cwd)
-            setattr(pyxel, "initialized", True)
+    def wrap_init(func: Callable) -> Callable:
+        """
+        Protect pyxel.init from being called after the first time, it panics otherwise.
 
-    return wrapper  # type: ignore
+        pyxel.init also does some CWD modification based on the stack, we need to
+        restore CWD because the stack information is wrong because we introduce our
+        wrapper.
+        """
+
+        def wrapper(*args, **kwargs):
+            if not getattr(pyxel, "initialized", False):
+                cwd = os.getcwd()
+                func(*args, **kwargs)
+                os.chdir(cwd)
+                setattr(pyxel, "initialized", True)
+
+        return wrapper  # type: ignore
+
+    pyxel.init = wrap_init(pyxel.init)
+
+    def noop_run(*args, **kwargs):
+        """
+        We run the game loop in our own way, so we don't want pyxel to run it.
+        """
+        pass
+
+    setattr(pyxel, "_run_original", pyxel.run)
+    pyxel.run = noop_run
