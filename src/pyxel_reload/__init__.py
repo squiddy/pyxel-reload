@@ -49,6 +49,8 @@ def handle_successful_reload() -> None:
     print("\033[H\033[J")
     print("✨ Refresh successful")
 
+    pyxel.stop()
+
 
 def handle_error(exc: BaseException) -> None:
     """
