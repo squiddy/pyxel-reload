@@ -55,3 +55,14 @@ When errors occur during reload:
 - The game continues running and will reload once errors are fixed
 
 ![](error-overlay.png)
+
+## Run code before reload
+
+If you need to run some code before the game is reloaded, you can define a
+`on_unload` function in your game module:
+
+```python
+
+def on_unload():
+    stop_music()
+```

@@ -34,6 +34,8 @@ def watch_for_changes() -> None:
         for _, filename in changes:
             if filename == app_module.__file__ or filename.endswith(".pyxres"):
                 try:
+                    if hasattr(app_module, "on_unload"):
+                        app_module.on_unload()
                     app_module = importlib.reload(app_module)
                     handle_successful_reload()
                 except Exception as e:
