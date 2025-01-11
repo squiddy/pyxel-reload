@@ -1,6 +1,6 @@
 [project]
 name = "pyxel-reload"
-version = "0.2.0"
+version = "0.2.1"
 description = "Run your pyxel applications, reloading when code / assets change"
 readme = "README.md"
 requires-python = ">=3.10"
